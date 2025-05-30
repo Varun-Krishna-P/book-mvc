@@ -9,9 +9,9 @@ import (
 )
 
 type Book struct {
-    ID     int    `bson:"id"`
-    Title  string `bson:"title"`
-    Author string `bson:"author"`
+    ID     interface{} `bson:"_id,omitempty"`
+    Title  string      `bson:"title"`
+    Author string      `bson:"author"`
 }
 
 // GetAllBooks fetches all books from the given MongoDB collection
@@ -39,4 +39,12 @@ func GetAllBooks(collection *mongo.Collection) []Book {
         log.Println("Cursor error:", err)
     }
     return books
+}
+
+// InsertBook inserts a new book into the collection
+func InsertBook(collection *mongo.Collection, book *Book) error {
+    ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+    _, err := collection.InsertOne(ctx, book)
+    return err
 }

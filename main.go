@@ -18,10 +18,12 @@ func main() {
     defer client.Disconnect(context.Background())
 
     // Get the books collection from your database (replace "yourdbname" and "books" as needed)
-    collection := client.Database("yourdbname").Collection("books")
-    controller.SetBookCollection(collection)
+    books_collection := client.Database("learning_db").Collection("books")
+    controller.SetBookCollection(books_collection)
 
     http.HandleFunc("/", controller.BookListHandler)
+    http.HandleFunc("/books/new", controller.NewBookFormHandler)
+    http.HandleFunc("/books/create", controller.CreateBookHandler)
     fmt.Println("Server is running on http://localhost:8080")
     http.ListenAndServe(":8080", nil)
 }
