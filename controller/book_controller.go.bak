@@ -1,0 +1,12 @@
+package controller
+
+import (
+    "net/http"
+    "book-mvc/model"
+    "book-mvc/view"
+)
+
+func BookListHandler(w http.ResponseWriter, r *http.Request) {
+    books := model.GetAllBooks()
+    view.RenderBookList(w, books)
+}
