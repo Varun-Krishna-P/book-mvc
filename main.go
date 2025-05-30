@@ -24,6 +24,7 @@ func main() {
     http.HandleFunc("/", controller.BookListHandler)
     http.HandleFunc("/books/new", controller.NewBookFormHandler)
     http.HandleFunc("/books/create", controller.CreateBookHandler)
+    http.HandleFunc("/books/show", controller.ShowBookHandler)
     fmt.Println("Server is running on http://localhost:8080")
     http.ListenAndServe(":8080", nil)
 }
