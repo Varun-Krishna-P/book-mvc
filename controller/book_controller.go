@@ -6,6 +6,7 @@ import (
     "go.mongodb.org/mongo-driver/mongo"
     "html/template"
     "log"
+    "go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 var bookCollection *mongo.Collection
@@ -57,4 +58,28 @@ func CreateBookHandler(w http.ResponseWriter, r *http.Request) {
 	// Redirect to the book list after successful insertion	
 
     http.Redirect(w, r, "/", http.StatusSeeOther)
+}
+
+func ShowBookHandler(w http.ResponseWriter, r *http.Request) {
+    if bookCollection == nil {
+        http.Error(w, "Database not initialized", http.StatusInternalServerError)
+        return
+    }
+    idStr := r.URL.Query().Get("id")
+    if idStr == "" {
+        http.Error(w, "Missing book ID", http.StatusBadRequest)
+        return
+    }
+    objID, err := primitive.ObjectIDFromHex(idStr)
+    if err != nil {
+        http.Error(w, "Invalid book ID", http.StatusBadRequest)
+        return
+    }
+    book, err := model.GetBookByID(bookCollection, objID)
+    if err != nil {
+        http.Error(w, "Book not found", http.StatusNotFound)
+        return
+    }
+    tmpl := template.Must(template.ParseFiles("view/book.html"))
+    tmpl.Execute(w, book)
 }

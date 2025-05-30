@@ -14,13 +14,13 @@
     <p><a href="/books/new">Add new book</a></p>
     <table>
         <tr>
-            <th>ID</th>
+            <th>Actions</th>
             <th>Title</th>
             <th>Author</th>
         </tr>
         {{range .}}
         <tr>
-            <td>{{.ID}}</td>
+            <td><a href="/books/show?id={{.ID.Hex}}">View</a></td>
             <td>{{.Title}}</td>
             <td>{{.Author}}</td>
         </tr>
