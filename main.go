@@ -6,11 +6,18 @@ import (
     "book-mvc/config"
     "context"
     "fmt"
+    "os"
+    "log"
+    "github.com/joho/godotenv"
 )
 
 func main() {
+    if err := godotenv.Load(); err != nil {
+        log.Fatal("Error loading .env file")
+    }
     // Connect to MongoDB
-***REMOVED***
+    fmt.Println("Connecting to MongoDB...", os.Getenv("MONGODB_URI"))
+    client, err := config.ConnectMongoDB(os.Getenv("MONGODB_URI"))
     if err != nil {
         fmt.Println("MongoDB connection error:", err)
         return
